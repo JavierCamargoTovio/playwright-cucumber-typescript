@@ -4,7 +4,7 @@ Proyecto de pruebas end-to-end con **Playwright** + **Cucumber** + **TypeScript*
 
 ## Requisitos
 
-- Node.js 18+
+- Node.js 22, 24 o ≥26 (requerido por `@cucumber/cucumber` v13)
 - npm
 
 ## Instalación

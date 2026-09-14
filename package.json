@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "22 || 24 || >=26"
+  },
   "scripts": {
     "test": "cucumber-js",
     "test:headed": "cross-env HEADLESS=false cucumber-js",
