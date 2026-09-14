@@ -2,6 +2,8 @@
 
 Proyecto de pruebas end-to-end con **Playwright** + **Cucumber** + **TypeScript**.
 
+Ver el [plan de pruebas](TEST_PLAN.md) para el detalle de alcance, estrategia y matriz de escenarios del login.
+
 ## Requisitos
 
 - Node.js 22, 24 o ≥26 (requerido por `@cucumber/cucumber` v13)
