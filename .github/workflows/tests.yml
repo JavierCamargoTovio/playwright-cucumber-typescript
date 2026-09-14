@@ -7,6 +7,10 @@ on:
     branches: [main]
   workflow_dispatch:
 
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -30,10 +34,37 @@ jobs:
       - name: Ejecutar pruebas
         run: npm test
 
-      - name: Publicar reporte de Cucumber
+      - name: Publicar reporte de Cucumber (artefacto descargable)
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: cucumber-report
           path: reports/
           retention-days: 7
+
+      - name: Preparar reporte para GitHub Pages
+        if: always()
+        run: |
+          mkdir -p pages
+          cp reports/cucumber-report.html pages/index.html
+
+      - name: Subir artefacto de GitHub Pages
+        if: always()
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: pages
+
+  deploy-pages:
+    needs: test
+    if: always() && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Desplegar en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

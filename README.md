@@ -40,13 +40,25 @@ Los reportes se generan en `reports/cucumber-report.html` y `reports/cucumber-re
 El workflow [.github/workflows/tests.yml](.github/workflows/tests.yml) ejecuta la suite completa en cada `push`/`pull request` a `main` (y también puede lanzarse manualmente desde la pestaña *Actions*):
 
 1. Checkout del repositorio
-2. Instala Node.js 20 (con cache de `npm`)
+2. Instala Node.js 22 (con cache de `npm`)
 3. `npm ci`
 4. `npx playwright install --with-deps chromium`
 5. `npm test`
 6. Sube `reports/` como artefacto descargable (`cucumber-report`), incluso si la ejecución falla
+7. Publica `reports/cucumber-report.html` en **GitHub Pages** (job `deploy-pages`)
 
-Si tu rama principal se llama `master` en lugar de `main`, actualiza los `branches` del workflow.
+Si tu rama principal se llama `master` en lugar de `main`, actualiza los `branches` del workflow (y la condición `github.ref` del job `deploy-pages`).
+
+### Habilitar GitHub Pages (una sola vez)
+
+El job `deploy-pages` usa las acciones oficiales de GitHub (`upload-pages-artifact` / `deploy-pages`), que requieren que el repositorio tenga Pages configurado para desplegar **desde GitHub Actions** (no desde una rama):
+
+1. En GitHub, ve a **Settings → Pages**.
+2. En **Build and deployment → Source**, selecciona **GitHub Actions**.
+3. Vuelve a ejecutar el workflow (push o *Run workflow* manual).
+
+Después de esto, cada ejecución en `main` publica el último reporte en la URL que GitHub asigna al Pages del repo (visible en **Settings → Pages** y en el resumen del job `deploy-pages`), por ejemplo:
+`https://javiercamargotovio.github.io/playwright-cucumber-typescript/`
 
 ## Configuración de VS Code (evitar "undefined step")
 
